@@ -1,6 +1,5 @@
 # get venv installed
 import os
-import sys
 
 print("--> Installing venv")
 install_venv = "python3 -m venv venv"
@@ -14,11 +13,26 @@ def venv_installed_correctly():
 if venv_installed_correctly():
     print("--> You have successfully installed venv")
 
-    # pip install Flask
-    print("--> Installing Flask")
-    install_Flask = "venv/bin/python -m pip install Flask"
-    os.system(install_Flask)
-    print("--> You have successfully installed Flask")
+    # check if install.txt exists, if not default to normal Flask install
+    if os.path.isfile("install.txt"):
+        # loop over txt file and install each line item
+        installTxt = open("install.txt", "r")
+        installItems = installTxt.readlines()
+
+        for line in installItems:
+            print(f"--> Installing {line}")
+            install_Line = f"venv/bin/python -m pip install {line}"
+            os.system(install_Line)
+            print(f"--> You have successfully installed {line}")
+    else:
+        # default to flask install
+        # pip install Flask
+        print("--> Could not find install.txt so defaulting to default install")
+        print("--> Installing Flask")
+        install_Flask = "venv/bin/python -m pip install Flask"
+        os.system(install_Flask)
+        print("--> You have successfully installed Flask")
+
     # create app.py file
     print("--> Creating files/folders")
     create_app = open("app.py", "w")
@@ -88,7 +102,7 @@ h1 {
 
     #Alert user that everything is finished
     print("--> Everything has finished installing and all files/folders have been created")
-    print("--> NOTE: For now you will need to re-activate venv if you wish to install more packages in venv")
+    #print("--> NOTE: For now you will need to re-activate venv if you wish to install more packages in venv")
 
     # activate venv
     os.system("/bin/bash --rcfile venv/bin/activate")
